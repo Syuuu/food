@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>小曦的厨房</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <div>
+        <p class="eyebrow">手机端点餐</p>
+        <h1>小曦的厨房</h1>
+        <p class="subtitle">把想吃的菜点上，我来准备。</p>
+        </div>
+        <div class="hero-card">
+        <p class="mini-label">已选菜品</p>
+        <p class="hero-dish" id="hero-dish">红油抄手</p>
+        <p class="mini-desc" id="hero-category">小吃</p>
+        </div>
+      </header>
+
+      <main class="content">
+        <section class="menu">
+          <div class="section-header">
+            <div>
+            <p class="eyebrow">菜品列表</p>
+            <h2>今日菜单</h2>
+            </div>
+          </div>
+        <div class="filters" id="filters"></div>
+        <div class="menu-grid" id="menu-grid"></div>
+        </section>
+
+        <section class="order">
+        <button type="button" class="primary big" id="order-btn">点餐</button>
+        </section>
+      </main>
+    </div>
+  <script src="script.js"></script>
+</body>
+</html>
