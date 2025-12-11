@@ -15,12 +15,12 @@
       <div>
         <p class="eyebrow">手机端专用 · 每天一次</p>
         <h1>小曦的厨房</h1>
-        <p class="subtitle">把想吃的菜点上，我会收到邮件提醒，今天就满足你！</p>
+        <p class="subtitle">把想吃的菜点上，我来做。每天一次，好好吃饭。</p>
       </div>
       <div class="hero-card">
-        <p class="mini-label">今日小确幸</p>
+        <p class="mini-label">今日想吃</p>
         <p class="hero-dish" id="hero-dish">红油抄手</p>
-        <p class="mini-desc">挑选一份，留下备注，马上开做！</p>
+        <p class="mini-desc">挑一份菜，写好时间和口味，我去准备。</p>
       </div>
     </header>
 
@@ -28,7 +28,7 @@
       <section class="menu">
         <div class="section-header">
           <div>
-            <p class="eyebrow">菜品列表（AI生成图片）</p>
+            <p class="eyebrow">菜品列表</p>
             <h2>今日菜单</h2>
           </div>
           <button class="pill" id="reset-btn" type="button">换一个</button>
@@ -58,13 +58,13 @@
             <textarea id="notes" name="notes" rows="3" placeholder="比如：少辣、不放香菜、19:30前好啦"></textarea>
           </div>
           <div class="summary" id="summary">还未选择菜品</div>
-          <button type="submit" class="primary">提交并邮件提醒</button>
-          <p class="hint">提交后会自动跳出邮件，你可以直接发送或复制内容。</p>
+          <button type="submit" class="primary">分享我的点餐</button>
+          <p class="hint">提交后会调起浏览器分享；若不支持分享，会生成可复制内容。</p>
         </form>
         <div class="copy-panel" id="copy-panel" hidden>
-          <p class="mini-label">邮件内容（已生成）</p>
+          <p class="mini-label">分享内容（已生成）</p>
           <textarea id="email-preview" readonly></textarea>
-          <button type="button" class="ghost" id="copy-btn">复制邮件正文</button>
+          <button type="button" class="ghost" id="copy-btn">复制分享文本</button>
         </div>
       </section>
     </main>

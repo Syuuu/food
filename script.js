@@ -21,8 +21,6 @@ const dishes = [
   '番茄煎蛋',
 ];
 
-const KITCHEN_EMAIL = 'your-email@example.com'; // 修改为你接收提醒的邮箱
-
 const menuGrid = document.getElementById('menu-grid');
 const heroDish = document.getElementById('hero-dish');
 const resetBtn = document.getElementById('reset-btn');
@@ -35,33 +33,26 @@ const copyBtn = document.getElementById('copy-btn');
 
 let selectedDish = null;
 
-const badgeTexts = ['重磅热菜', '今日想吃', '暖心汤品', '速溶快手', '灵魂主食'];
-
 function today() {
   const now = new Date();
   return now.toISOString().slice(0, 10);
 }
 
 function makeImageUrl(name) {
-  const prompt = encodeURIComponent(`cinematic food photography, ${name}, studio light, ai generated, 4k`);
+  const prompt = encodeURIComponent(`high quality food photo of ${name}, close-up, natural light, appetizing, chinese home cooking`);
   return `https://image.pollinations.ai/prompt/${prompt}`;
 }
 
 function renderMenu() {
   const fragment = document.createDocumentFragment();
-  dishes.forEach((name, idx) => {
+  dishes.forEach((name) => {
     const card = document.createElement('article');
     card.className = 'card';
     card.dataset.name = name;
 
-    const badge = document.createElement('span');
-    badge.className = 'badge';
-    badge.textContent = badgeTexts[idx % badgeTexts.length];
-    card.appendChild(badge);
-
     const img = document.createElement('img');
     img.loading = 'lazy';
-    img.alt = `${name} 图片 (AI 生成)`;
+    img.alt = `${name} 照片`;
     img.src = makeImageUrl(name);
     card.appendChild(img);
 
@@ -117,20 +108,12 @@ function updateStatus() {
   return true;
 }
 
-function buildMailto({ name, date, notes }) {
-  const subject = encodeURIComponent(`小曦的厨房点餐 - ${date}`);
-  const greeting = name ? `${name} 想吃：${selectedDish}` : `点餐：${selectedDish}`;
-  const lines = [
-    greeting,
-    '',
-    `日期：${date}`,
-    `备注：${notes || '无'}`,
-    '',
-    '来自小曦的厨房 App 自动生成'
-  ];
-  const bodyText = lines.join('\n');
-  const body = encodeURIComponent(bodyText);
-  return { mailto: `mailto:${KITCHEN_EMAIL}?subject=${subject}&body=${body}`, bodyText };
+function buildShareText({ name, date, notes }) {
+  const title = '小曦的厨房 - 点餐';
+  const head = name ? `${name} 想吃：${selectedDish}` : `点餐：${selectedDish}`;
+  const lines = [head, `日期：${date}`, `备注：${notes || '无'}`];
+  const text = lines.join('\n');
+  return { title, text };
 }
 
 function handleSubmit(event) {
@@ -151,20 +134,28 @@ function handleSubmit(event) {
   const date = formData.get('date');
   const notes = formData.get('notes')?.trim();
 
-  const { mailto, bodyText } = buildMailto({ name, date, notes });
+  const { title, text } = buildShareText({ name, date, notes });
 
-  emailPreview.value = bodyText;
+  emailPreview.value = text;
   copyPanel.hidden = false;
   localStorage.setItem('last-order-date', today());
   updateStatus();
 
-  window.location.href = mailto;
+  if (navigator.share) {
+    navigator.share({ title, text }).catch(() => {
+      summaryEl.textContent = '分享被取消，内容已生成可复制';
+      summaryEl.style.color = '#f7d46b';
+    });
+  } else {
+    summaryEl.textContent = '浏览器不支持分享，已生成可复制内容';
+    summaryEl.style.color = '#f7d46b';
+  }
 }
 
 function copyText() {
   navigator.clipboard.writeText(emailPreview.value).then(() => {
-    copyBtn.textContent = '已复制，再去邮箱粘贴';
-    setTimeout(() => (copyBtn.textContent = '复制邮件正文'), 2000);
+    copyBtn.textContent = '已复制，去分享吧';
+    setTimeout(() => (copyBtn.textContent = '复制分享文本'), 2000);
   });
 }
 
