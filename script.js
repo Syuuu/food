@@ -32,6 +32,7 @@ const emailPreview = document.getElementById('email-preview');
 const copyBtn = document.getElementById('copy-btn');
 
 let selectedDish = null;
+const isWeChat = /MicroMessenger/i.test(navigator.userAgent);
 
 function today() {
   const now = new Date();
@@ -92,6 +93,7 @@ function selectDish(name, cardElement) {
   selectedDish = name;
   heroDish.textContent = name;
   summaryEl.textContent = `已选择：${name}`;
+  summaryEl.style.color = '#f4f6fb';
   document.querySelectorAll('.card').forEach((card) => card.classList.remove('selected'));
   cardElement.classList.add('selected');
 }
@@ -108,12 +110,11 @@ function updateStatus() {
   return true;
 }
 
-function buildShareText({ name, date, notes }) {
+function buildShareText() {
   const title = '小曦的厨房 - 点餐';
-  const head = name ? `${name} 想吃：${selectedDish}` : `点餐：${selectedDish}`;
-  const lines = [head, `日期：${date}`, `备注：${notes || '无'}`];
+  const lines = [`今日想吃：${selectedDish}`, `日期：${today()}`, '备注：无'];
   const text = lines.join('\n');
-  return { title, text };
+  return { title, text, url: location.href };
 }
 
 function handleSubmit(event) {
@@ -129,20 +130,26 @@ function handleSubmit(event) {
     return;
   }
 
-  const formData = new FormData(orderForm);
-  const name = formData.get('name')?.trim();
-  const date = formData.get('date');
-  const notes = formData.get('notes')?.trim();
-
-  const { title, text } = buildShareText({ name, date, notes });
+  const { title, text, url } = buildShareText();
 
   emailPreview.value = text;
   copyPanel.hidden = false;
   localStorage.setItem('last-order-date', today());
   updateStatus();
 
+  summaryEl.textContent = '分享内容已准备，去分享吧';
+  summaryEl.style.color = '#7ad9a5';
+
+  if (isWeChat) {
+    copyText().then(() => {
+      summaryEl.textContent = '已复制内容，点右上角分享给我';
+      summaryEl.style.color = '#7ad9a5';
+    });
+    return;
+  }
+
   if (navigator.share) {
-    navigator.share({ title, text }).catch(() => {
+    navigator.share({ title, text, url }).catch(() => {
       summaryEl.textContent = '分享被取消，内容已生成可复制';
       summaryEl.style.color = '#f7d46b';
     });
@@ -153,7 +160,7 @@ function handleSubmit(event) {
 }
 
 function copyText() {
-  navigator.clipboard.writeText(emailPreview.value).then(() => {
+  return navigator.clipboard.writeText(emailPreview.value).then(() => {
     copyBtn.textContent = '已复制，去分享吧';
     setTimeout(() => (copyBtn.textContent = '复制分享文本'), 2000);
   });
@@ -165,7 +172,6 @@ function shuffleHero() {
 }
 
 function initFormDefaults() {
-  document.getElementById('date').value = today();
   updateStatus();
 }
 

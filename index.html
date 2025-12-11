@@ -20,7 +20,7 @@
       <div class="hero-card">
         <p class="mini-label">今日想吃</p>
         <p class="hero-dish" id="hero-dish">红油抄手</p>
-        <p class="mini-desc">挑一份菜，写好时间和口味，我去准备。</p>
+        <p class="mini-desc">挑一份菜，点一下分享给我，我去准备。</p>
       </div>
     </header>
 
@@ -45,21 +45,9 @@
           <p class="status" id="status-text">今天还没提交</p>
         </div>
         <form id="order-form" class="order-form">
-          <div class="form-group">
-            <label for="name">你的昵称</label>
-            <input id="name" name="name" type="text" placeholder="写上你的名字或称呼" autocomplete="name" />
-          </div>
-          <div class="form-group">
-            <label for="date">用餐日期</label>
-            <input id="date" name="date" type="date" required />
-          </div>
-          <div class="form-group">
-            <label for="notes">备注（口味/忌口/到家时间）</label>
-            <textarea id="notes" name="notes" rows="3" placeholder="比如：少辣、不放香菜、19:30前好啦"></textarea>
-          </div>
           <div class="summary" id="summary">还未选择菜品</div>
           <button type="submit" class="primary">分享我的点餐</button>
-          <p class="hint">提交后会调起浏览器分享；若不支持分享，会生成可复制内容。</p>
+          <p class="hint">提交后会调起系统分享；若设备不支持，会生成可复制内容，微信内会自动复制并提示操作。</p>
         </form>
         <div class="copy-panel" id="copy-panel" hidden>
           <p class="mini-label">分享内容（已生成）</p>
