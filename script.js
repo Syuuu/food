@@ -118,10 +118,17 @@ function highlightSelection(cardElement) {
   }
 }
 
+function getShareUrl() {
+  const url = new URL(location.href);
+  url.searchParams.set('dish', selectedDish.name);
+  return url.toString();
+}
+
 function buildShareText() {
   const title = '小曦的厨房';
-  const text = `我想吃：${selectedDish.name}`;
-  return { title, text, url: location.href };
+  const url = getShareUrl();
+  const text = `我想吃：${selectedDish.name}\n看看这道菜：${url}`;
+  return { title, text, url };
 }
 
 async function copyText(text) {
@@ -170,6 +177,13 @@ function handleOrder() {
 }
 
 function init() {
+  const params = new URLSearchParams(location.search);
+  const urlDish = params.get('dish');
+  const found = dishes.find((dish) => dish.name === urlDish);
+  if (found) {
+    selectedDish = found;
+  }
+
   renderFilters();
   renderMenu();
   selectDish(selectedDish);
